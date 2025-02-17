@@ -1,7 +1,7 @@
-import NextAuth from 'next-auth'
+import NextAuth, { type NextAuthOptions } from 'next-auth'
 import GitHubProvider from 'next-auth/providers/github'
 
-const authOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID ?? '',
@@ -9,9 +9,11 @@ const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ profile }: { profile: { login: string } }) {
-      console.log(profile)
-      return profile.login === 'RafalKielbasa' ? true : false
+    async signIn(auth) {
+      if (auth.profile && 'login' in auth.profile) {
+        return auth.profile?.login === 'RafalKielbasa'
+      }
+      return false
     },
   },
 }
