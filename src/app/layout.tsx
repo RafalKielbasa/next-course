@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import Link from 'next/link'
 import './globals.css'
+import { SessionProvider } from './components/SessionProvider'
+
+import UserButton from './components/UserButton'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -24,16 +27,19 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <nav className='flex justify-start p-5 gap-8 bg-gray-800 text-white'>
-          <Link href='/'>ChatGPT</Link>
-          <Link href='/about'>About</Link>
-        </nav>
-        <div className='p-5'>{children}</div>
-      </body>
-    </html>
+    <SessionProvider>
+      <html lang='en'>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <nav className='flex justify-start p-5 gap-8 bg-gray-800 text-white'>
+            <Link href='/'>ChatGPT</Link>
+            <Link href='/about'>About</Link>
+            <UserButton />
+          </nav>
+          <div className='p-5'>{children}</div>
+        </body>
+      </html>
+    </SessionProvider>
   )
 }
